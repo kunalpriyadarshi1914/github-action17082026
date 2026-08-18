@@ -1,25 +1,27 @@
 # File: .github/workflows/workflow.yml
 
 name: Run Azure Login with OIDC
-on: [push]
+
+on:
+  push:
 
 permissions:
   id-token: write
   contents: read
+
 jobs:
-  azure-login :
+  azure-login:
     runs-on: self-hosted
+
     steps:
-      - name: Azure login
+      - name: Azure Login
         uses: azure/login@v3
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Azure CLI script
-        uses: azure/cli@v2
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
+      - name: Verify Azure Login
+        shell: powershell
+        run: |
+          az account show --output table
