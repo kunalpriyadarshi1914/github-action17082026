@@ -2,8 +2,7 @@
 
 name: Run Azure Login with OIDC
 
-on:
-  push:
+on: [push]
 
 permissions:
   id-token: write
@@ -22,6 +21,5 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Verify Azure Login
-        shell: powershell
-        run: |
-          az account show --output table
+        shell: cmd
+        run: az account show --output table
