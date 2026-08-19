@@ -1,15 +1,20 @@
-# File: .github/workflows/workflow.yml
+# Terraform-infra19082026
 
-name: Run Azure Login with OIDC
+name: terraform19082026
 on: [push]
 
 permissions:
   id-token: write
   contents: read
+  ############################terraform-plan##################################################
 jobs:
-  azure-login:
-    runs-on:  self-hosted
+  terraform-plan:
+    runs-on:  ubuntu-latest
     steps:
+    #############checkout-repository############################
+      - name: Checkout
+        uses: actions/checkout@v4
+    ####### azure-login ######################
       - name: Azure login
         uses: azure/login@v3
         with:
@@ -23,3 +28,16 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az account show
+     ################ terraform-setup##############
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+    ################# terraform-init###############
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./parent-module/dev
+    ################# terraform-plan##############
+        
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: ./parent-module/dev
+      
