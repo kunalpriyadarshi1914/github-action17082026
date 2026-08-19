@@ -34,10 +34,10 @@ jobs:
     ################# terraform-init###############
       - name: Terraform Init
         run: terraform init
-        working-directory: ./parent-module/dev
+        working-directory: ./parent_modules/dev
     ################# terraform-plan##############
         
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./parent-module/dev
+        working-directory: ./parent_modules/dev
       
