@@ -1,0 +1,67 @@
+name: Terraform Azure Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: self-hosted
+
+    steps:
+
+      # 1. GitHub repository ka code runner par download karega
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Azure mein OIDC se login
+      - name: Azure Login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # 3. Terraform install/setup
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 4. Check Azure login
+      - name: Verify Azure Login
+        shell: cmd
+        run: az account show --output table
+
+      # 5. Terraform initialize
+      - name: Terraform Init
+        shell: cmd
+        env:
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: terraform init
+
+      # 6. Terraform plan
+      - name: Terraform Plan
+        shell: cmd
+        env:
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: terraform plan -out=tfplan
+
+      # 7. Terraform apply
+      - name: Terraform Apply
+        shell: cmd
+        env:
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: terraform apply -auto-approve tfplan
