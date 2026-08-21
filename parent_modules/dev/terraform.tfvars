@@ -3,10 +3,7 @@ rgs = {
     name     = "mod-rg8"
     location = "centralindia"
   }
-  rg2 = {
-    name     = "mod-rg9"
-    location = "centralindia"
-  }
+
 }
 subnets = {
   subnet1 = {
@@ -33,6 +30,14 @@ vnets= {
 
   }
   }
+pips = {
+  pip1={
+    pip_name= "mod-pip1"
+    location="centralindia"
+    resource_group_name="mod-rg8"
+
+  }
+}
 
 
 vms = {
@@ -48,18 +53,5 @@ vms = {
     admin_username       = "Shiva_devops1914"
     admin_password       = "komalkunal@1914"
     
-  }
-
-  vm2 = {
-    nic_name             = "vm-nic9"
-    location_name        = "centralindia"
-    rg_name              = "mod-rg8"
-    subnet_name          = "modsubnet9"
-    virtual_network_name = "mod-vnet8"
-    pip_name             = "mod-pip2"
-    vm-name              = "mod-vm9"
-    size-name            = "Standard_B1s"
-    admin_username       = "Shiva_devops1914"
-    admin_password       = "komalkunal@1914"
   }
 }
