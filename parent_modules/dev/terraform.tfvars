@@ -49,7 +49,7 @@ vms = {
     virtual_network_name = "mod-vnet8"
     pip_name             = "mod-pip1"
     vm-name              = "mod-vm8"
-    size-name            = "Standard_B1s"
+    size-name            = "Standard_DC1ds_v3"
     admin_username       = "Shiva_devops1914"
     admin_password       = "komalkunal@1914"
     
