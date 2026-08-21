@@ -40,4 +40,42 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
         working-directory: ./parent_modules/dev
+  ############################terraform-apply##################################################
+
+  terraform-apply:
+    needs: terraform-plan
+    
+    runs-on:  ubuntu-latest
+    environment: production
+    steps:
+    #############checkout-repository############################
+      - name: Checkout
+        uses: actions/checkout@v4
+    ####### azure-login ######################
+      - name: Azure login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure CLI script
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az account show
+     ################ terraform-setup##############
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+    ################# terraform-init###############
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./parent_modules/dev
+    ################# terraform-apply##############
+        
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./parent_modules/dev
+        
       
